@@ -1,0 +1,22 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-body">
+      <div class="logo-container">
+        <img src="assets/images/Logo_La_Ciota.png" alt="La Ciotat Logo" class="logo">
+      </div>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="matricule" class="form-label !text-[#010e7c]">Matricule</label>
+          <input type="text" id="matricule" name="matricule" [(ngModel)]="matricule" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label !text-[#010e7c]">Mot de passe</label>
+          <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn-connect">Se connecter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

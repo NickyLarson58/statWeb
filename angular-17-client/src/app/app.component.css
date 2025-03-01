@@ -1,0 +1,7 @@
+button:focus {
+    outline: none;
+  }
+
+  .bg-pm{
+    background: linear-gradient(to right, #0056b3, #ffffff, #d32f2f);
+  }

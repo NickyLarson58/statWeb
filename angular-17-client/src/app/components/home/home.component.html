@@ -1,0 +1,38 @@
+<!-- Message d'accueil -->
+  <div class="mt-12 rounded-lg text-center">
+    <div class="mt-4 p-6 text-center">
+      <div class="bg-gradient-to-r from-[#010e7c] to-[#3949ab] pt-2 rounded-full px-4 pb-2">
+        <span class="text-5xl text-white font-bold">{{ time }}</span>
+        <p class="text-white mt-1 text-lg">{{ date }}</p>
+        <!-- Météo -->
+        <div *ngIf="weather" class="mt-2 flex items-center justify-center">
+          <img [src]="weatherIcon" alt="Weather icon" class="w-10 h-10">
+          <span class="text-white text-xl font-semibold ml-2">{{ temperature }}°C</span>
+          <span class="text-white text-sm ml-2">{{ weather.weather[0].description }}</span>
+        </div>
+      </div>
+    </div>
+    <p class="mt-4 text-2xl font-bold bg-gradient-to-r from-[#010e7c] to-[#3949ab] text-transparent bg-clip-text drop-shadow-lg">
+      Bienvenue <br> Agent Prenom Nom
+    </p>
+  </div>
+
+  <!-- Heure & Date -->
+
+  <div class="mt-16 flex flex-col items-center">
+    <!-- Boutons d'actions -->
+    <div class="mt-4 space-y-3 w-full flex flex-col items-center">
+      <button class="w-[80%] py-3 bg-gradient-to-r from-[#010e7c] to-[#3949ab] text-white rounded-lg shadow-md text-lg font-semibold hover:from-[#000c6d] hover:to-[#303f9f] transition-all duration-300">
+        Création d'Équipage
+      </button>
+      <button class="w-[80%] py-3 bg-gradient-to-r from-[#0056b3] to-[#00bcd4] text-white rounded-lg shadow-md text-lg font-semibold hover:from-[#004ba0] hover:to-[#00acc1] transition-all duration-300">
+        Nouvelle Mission
+      </button>
+      <button class="w-[80%] py-3 bg-gradient-to-r from-[#5e35b1] to-[#7b1fa2] text-white rounded-lg shadow-md text-lg font-semibold hover:from-[#512da8] hover:to-[#6a1b9a] transition-all duration-300">
+        Intervention
+      </button>
+      <button class="w-[80%] py-3 bg-gradient-to-r from-[#303f9f] to-[#1976d2] text-white rounded-lg shadow-md text-lg font-semibold hover:from-[#283593] hover:to-[#1565c0] transition-all duration-300">
+        Statistics
+      </button>
+    </div>
+  </div>
