@@ -1,0 +1,51 @@
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#010e7c] to-[#3949ab] text-transparent bg-clip-text">Création d'Équipage</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <!-- Premier agent -->
+    <div class="mb-4">
+      <label class="block text-lg text-[#010e7c] mb-2">Agent 1</label>
+      <select [(ngModel)]="selectedAgents[0]" (ngModelChange)="onAgentSelect(0, $event)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <option [ngValue]="null">Sélectionner un agent</option>
+        <option *ngFor="let agent of filteredAgents" [ngValue]="agent" [disabled]="selectedAgents.includes(agent) && selectedAgents.indexOf(agent) !== 0">{{agent.matricule}} - {{agent.nomAgent}} {{agent.prenomAgent}}</option>
+      </select>
+    </div>
+
+    <!-- Deuxième agent -->
+    <div class="mb-4">
+      <label class="block text-lg text-[#010e7c] mb-2">Agent 2</label>
+      <select [(ngModel)]="selectedAgents[1]" (ngModelChange)="onAgentSelect(1, $event)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <option [ngValue]="null">Sélectionner un agent</option>
+        <option *ngFor="let agent of filteredAgents" [ngValue]="agent" [disabled]="selectedAgents.includes(agent) && selectedAgents.indexOf(agent) !== 1">{{agent.matricule}} - {{agent.nomAgent}} {{agent.prenomAgent}}</option>
+      </select>
+    </div>
+
+    <!-- Troisième agent -->
+    <div class="mb-4">
+      <label class="block text-lg text-[#010e7c] mb-2">Agent 3</label>
+      <select [(ngModel)]="selectedAgents[2]" (ngModelChange)="onAgentSelect(2, $event)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <option [ngValue]="null">Sélectionner un agent</option>
+        <option *ngFor="let agent of filteredAgents" [ngValue]="agent" [disabled]="selectedAgents.includes(agent) && selectedAgents.indexOf(agent) !== 2">{{agent.matricule}} - {{agent.nomAgent}} {{agent.prenomAgent}}</option>
+      </select>
+    </div>
+
+    <!-- Quatrième agent -->
+    <div class="mb-4">
+      <label class="block text-lg text-[#010e7c] mb-2">Agent 4</label>
+      <select [(ngModel)]="selectedAgents[3]" (ngModelChange)="onAgentSelect(3, $event)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <option [ngValue]="null">Sélectionner un agent</option>
+        <option *ngFor="let agent of filteredAgents" [ngValue]="agent" [disabled]="selectedAgents.includes(agent) && selectedAgents.indexOf(agent) !== 3">{{agent.matricule}} - {{agent.nomAgent}} {{agent.prenomAgent}}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Bouton Créer l'équipe -->
+  <div class="flex justify-center mt-8">
+    <button 
+      (click)="createEquipage()" 
+      [disabled]="!isEquipageValid()" 
+      class="w-full md:w-1/2 py-3 bg-gradient-to-r from-[#010e7c] to-[#3949ab] text-white rounded-lg shadow-md text-lg font-semibold hover:from-[#000c6d] hover:to-[#303f9f] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+      Créer l'équipage
+    </button>
+  </div>
+</div>

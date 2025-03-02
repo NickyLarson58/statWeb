@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
+import { EquipageService } from '../../services/equipage.service';
 
 interface WeatherData {
   main: {
@@ -24,8 +26,12 @@ export class HomeComponent implements OnInit {
   weather: WeatherData | null = null;
   weatherIcon: string = '';
   temperature: number = 0;
+  user: any;
+  isDropdownOpen: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, protected authService: AuthService, protected equipageService: EquipageService) {
+    this.user = this.authService.getCurrentUser();
+
     this.updateTime();
     setInterval(() => this.updateTime(), 1000);
   }

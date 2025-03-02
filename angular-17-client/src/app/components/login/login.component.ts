@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,20 @@ export class LoginComponent {
   matricule: string = '';
   password: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   onSubmit() {
-    // TODO: Implement authentication logic
-    console.log('Login attempt with:', { matricule: this.matricule, password: this.password });
+    this.authService.login(this.matricule, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        console.error('Login failed:', err);
+        // Here you can add logic to show error message to user
+      }
+    });
   }
 }

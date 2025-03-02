@@ -1,0 +1,103 @@
+<div class="container mx-auto p-4">
+  <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6">Gestion des Interventions</h2>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Intervention Selection -->
+      <div class="mb-8">
+        <label for="intervention" class="block text-sm font-medium text-gray-700">Type d'intervention</label>
+        <select
+          id="intervention"
+          [(ngModel)]="selectedIntervention"
+          name="intervention"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          <option [ngValue]="null">-- Sélectionner une intervention --</option>
+          <option *ngFor="let intervention of interventions" [ngValue]="intervention">
+            {{intervention.nomInterventions}}
+          </option>
+        </select>
+      </div>
+
+      <!-- Details Field (Conditional) -->
+      <!-- Address Input with Autocomplete -->
+      <div class="mb-8 relative" *ngIf="showDetailsField()">
+        <label for="address" class="block text-sm font-medium text-gray-700">Adresse</label>
+        <input
+        type="text"
+        id="details"
+        [(ngModel)]="details"
+        name="details"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        placeholder="Saisir NATINF ou libellé">
+        
+        <!-- Address Suggestions -->
+        <div *ngIf="infractions.length > 0" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto">
+          <div
+            *ngFor="let infraction of infractions"
+            class="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0">
+            {{infraction.libelle}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Input with Autocomplete -->
+      <div class="mb-8 relative">
+        <label for="address" class="block text-sm font-medium text-gray-700">Adresse</label>
+        <input
+          type="text"
+          id="address"
+          [(ngModel)]="addressInput"
+          (input)="filterAddresses()"
+          name="address"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          placeholder="Saisir une adresse"
+          required>
+        
+        <!-- Address Suggestions -->
+        <div *ngIf="filteredAddresses.length > 0" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto">
+          <div
+            *ngFor="let address of filteredAddresses"
+            (click)="selectAddress(address)"
+            class="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0">
+            {{address.nomadresse}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Number of Interventions Input -->
+      <div class="mb-8">
+        <label for="nombreIntervention" class="block text-sm font-medium text-gray-700">Nombre d'interventions</label>
+        <input
+          type="number"
+          id="nombreIntervention"
+          [(ngModel)]="nombreIntervention"
+          name="nombreIntervention"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          min="0"
+          step="1"
+          required>
+      </div>
+
+      <!-- Date Input -->
+      <div class="mb-8">
+        <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+        <input
+          type="date"
+          id="date"
+          [(ngModel)]="dateIntervention"
+          name="date"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          required>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Enregistrer l'intervention
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
