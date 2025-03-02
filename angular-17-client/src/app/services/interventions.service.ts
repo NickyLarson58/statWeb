@@ -3,8 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Intervention {
-  id?: number;
+    id?: number;
+    nomInterventions: string;
+  }
+
+export interface CreatedStatIntervention {
+  idIntervention: number;
+  dateIntervention: string;
   nomInterventions: string;
+  nombreIntervention: number;
+  idAdresse: number;
+  idMad?: number;
+  idInfraction?: number;
 }
 
 export interface Address {
@@ -24,15 +34,19 @@ export class InterventionsService {
     return this.http.get<Intervention[]>(`${this.baseUrl}/interventions`);
   }
 
-  getAllInfractions(): Observable<Intervention[]> {
-    return this.http.get<Intervention[]>(`${this.baseUrl}/infractions`);
+  getAllInfractions(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/infractions`);
+  }
+
+  getAllMad(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/mad`);
   }
 
   getAddresses(): Observable<Address[]> {
     return this.http.get<Address[]>(`${this.baseUrl}/adresses`);
   }
 
-  createIntervention(intervention: Intervention): Observable<Intervention> {
-    return this.http.post<Intervention>(`${this.baseUrl}/interventions`, intervention);
+  createIntervention(createdStatIntervention: CreatedStatIntervention): Observable<Intervention> {
+    return this.http.post<Intervention>(`${this.baseUrl}/interventions`, createdStatIntervention);
   }
 }

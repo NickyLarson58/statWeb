@@ -11,14 +11,19 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pm.spring.jpa.h2.model.Interventions;
 import com.pm.spring.jpa.h2.repository.InterventionsRepository;
+import com.pm.spring.jpa.h2.payload.CreatedStatInterventionDTO;
+import com.pm.spring.jpa.h2.service.InterventionService;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class InterventionsController {
 
     @Autowired
     InterventionsRepository interventionsRepository;
+
+    @Autowired
+    private InterventionService interventionService;
 
     @GetMapping("/interventions")
     public ResponseEntity<List<Interventions>> getAllInterventions() {
@@ -44,13 +49,9 @@ public class InterventionsController {
     }
 
     @PostMapping("/interventions")
-    public ResponseEntity<Interventions> createInterventions(@RequestBody Interventions interventions) {
-        try {
-            Interventions _interventions = interventionsRepository.save(interventions);
-            return new ResponseEntity<>(_interventions, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Long> createIntervention(@RequestBody CreatedStatInterventionDTO interventionDTO) {
+        Long createdId = interventionService.createIntervention(interventionDTO);
+        return ResponseEntity.ok(createdId);
     }
 
     @PutMapping("/interventions/{id}")

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { InterventionsService, Intervention, Address } from '../../services/interventions.service';
+import { InterventionsService, Intervention, Address, CreatedStatIntervention } from '../../services/interventions.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-interventions',
@@ -11,25 +12,44 @@ export class InterventionsComponent implements OnInit {
   addresses: Address[] = [];
   filteredAddresses: Address[] = [];
   infractions: any[] = [];
+  filteredInfractions: any[] = [];
+  mad: any[] = [];
+  filteredMad: any[] = [];
   selectedIntervention: Intervention | null = null;
   addressInput: string = '';
+  selectedAdress: Address | null = null;
   nombreIntervention: number = 0;
-  details: string = '';
+  detailsInfraction: string = '';
+  detailsMad: string = '';
   dateIntervention: string = new Date().toISOString().split('T')[0];
+  isValidAddress: boolean = false;
+  isValidInfraction: boolean = false;
+  isValidMad: boolean = false;
+  selectedMad: any | null = null;
+  selectedInfraction: any | null = null;
 
-  constructor(private interventionsService: InterventionsService) {}
+  constructor(private interventionsService: InterventionsService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadInterventions();
     this.loadAddresses();
     this.loadInfractions();
+    this.loadMad();
   }
 
   loadInfractions(): void {
     this.interventionsService.getAllInfractions().subscribe({
       next: (data) => {
         this.infractions = data;
-        console.log('Infractions loaded:', data);
+      },
+      error: (e) => console.error('Error loading infractions:', e)
+    });
+  }
+
+  loadMad(): void {
+    this.interventionsService.getAllMad().subscribe({
+      next: (data) => {
+        this.mad = data;
       },
       error: (e) => console.error('Error loading infractions:', e)
     });
@@ -56,6 +76,7 @@ export class InterventionsComponent implements OnInit {
 
   filterAddresses(): void {
     this.filteredAddresses = [];
+    this.isValidAddress = false;
     
     if (!this.addressInput || this.addressInput.trim() === '') {
       return;
@@ -71,23 +92,37 @@ export class InterventionsComponent implements OnInit {
 
   selectAddress(address: Address): void {
     this.addressInput = address.nomadresse;
+    this.selectedAdress = address;
     this.filteredAddresses = [];
+    this.isValidAddress = true;
   }
 
   onSubmit(): void {
-    if (!this.selectedIntervention || !this.addressInput || !this.nombreIntervention) {
-      alert('Veuillez remplir tous les champs obligatoires');
+    if (!this.selectedIntervention || !this.isValidAddress || !this.nombreIntervention || !this.dateIntervention || !this.selectedAdress ||
+        (this.selectedIntervention.nomInterventions === 'CODE DE LA ROUTE' && !this.isValidInfraction) ||
+        (this.selectedIntervention.nomInterventions === 'MAD' && !this.isValidMad)) {
+      alert('Veuillez sélectionner des valeurs valides dans les listes suggérées');
       return;
     }
 
-    const intervention: Intervention = {
-      nomInterventions: this.selectedIntervention.nomInterventions
+    const createdStatIntervention: CreatedStatIntervention = {
+      idIntervention: this.selectedIntervention.id!,
+      dateIntervention: this.dateIntervention,
+      nomInterventions: this.selectedIntervention.nomInterventions,
+      nombreIntervention: this.nombreIntervention,
+      idAdresse: this.selectedAdress.id,
     };
 
-    this.interventionsService.createIntervention(intervention).subscribe({
+    if(this.selectedIntervention.nomInterventions === 'CODE DE LA ROUTE'){
+      createdStatIntervention.idInfraction = this.selectedInfraction.id;
+    }else if(this.selectedIntervention.nomInterventions === 'MAD'){
+      createdStatIntervention.idMad = this.selectedMad.id;
+    }
+    this.interventionsService.createIntervention(createdStatIntervention).subscribe({
       next: () => {
         alert('Intervention enregistrée avec succès');
         this.resetForm();
+        this.router.navigate(['/home']);
       },
       error: (e) => {
         console.error('Error creating intervention:', e);
@@ -99,14 +134,62 @@ export class InterventionsComponent implements OnInit {
   resetForm(): void {
     this.selectedIntervention = null;
     this.addressInput = '';
+    this.selectedAdress = null;
     this.nombreIntervention = 0;
-    this.details = '';
+    this.detailsInfraction = '';
+    this.detailsMad = '';
     this.dateIntervention = new Date().toISOString().split('T')[0];
     this.filteredAddresses = [];
+    this.isValidAddress = false;
+    this.isValidInfraction = false;
+    this.isValidMad = false;
+    this.selectedInfraction = null;
+    this.selectedMad = null;
   }
 
-  showDetailsField(): boolean {
-    return this.selectedIntervention?.nomInterventions === 'MAD' || 
-           this.selectedIntervention?.nomInterventions === 'CODE DE LA ROUTE';
+  filterInfractions(): void {
+    this.filteredInfractions = [];
+    this.isValidInfraction = false;
+    
+    if (!this.detailsInfraction || this.detailsInfraction.trim() === '') {
+      return;
+    }
+    
+    const searchTerm = this.detailsInfraction.toLowerCase().trim();
+    this.filteredInfractions = this.infractions
+      .filter(infraction =>
+        infraction.libelle.toLowerCase().includes(searchTerm) || infraction.natinf == searchTerm
+      )
+      .slice(0, 5);
+  }
+
+  selectInfraction(infraction: any): void {
+    this.detailsInfraction = infraction.libelle;
+    this.selectedInfraction = infraction;
+    this.filteredInfractions = [];
+    this.isValidInfraction = true;
+  }
+
+  filterMad(): void {
+    this.filteredMad = [];
+    this.isValidMad = false;
+    
+    if (!this.detailsMad || this.detailsMad.trim() === '') {
+      return;
+    }
+    
+    const searchTerm = this.detailsMad.toLowerCase().trim();
+    this.filteredMad = this.mad
+      .filter(mad =>
+        mad.libelle.toLowerCase().includes(searchTerm) || mad.natinf == searchTerm
+      )
+      .slice(0, 5);
+  }
+
+  selectMad(mad: any): void {
+    this.detailsMad = mad.libelle;
+    this.filteredMad = [];
+    this.selectedMad = mad;
+    this.isValidMad = true;
   }
 }

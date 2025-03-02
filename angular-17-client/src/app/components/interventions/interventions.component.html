@@ -18,26 +18,54 @@
         </select>
       </div>
 
-      <!-- Details Field (Conditional) -->
-      <!-- Address Input with Autocomplete -->
-      <div class="mb-8 relative" *ngIf="showDetailsField()">
-        <label for="address" class="block text-sm font-medium text-gray-700">Adresse</label>
+      <!-- Details Intervention Field (Conditional) -->
+      <div class="mb-8 relative" *ngIf="selectedIntervention?.nomInterventions === 'CODE DE LA ROUTE'">
+        <label for="details" class="block text-sm font-medium text-gray-700">Infraction</label>
         <input
         type="text"
         id="details"
-        [(ngModel)]="details"
+        [(ngModel)]="detailsInfraction"
+        (input)="filterInfractions()"
         name="details"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         placeholder="Saisir NATINF ou libellé">
         
-        <!-- Address Suggestions -->
-        <div *ngIf="infractions.length > 0" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto">
-          <div
-            *ngFor="let infraction of infractions"
-            class="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0">
-            {{infraction.libelle}}
-          </div>
-        </div>
+        <!-- Infraction Suggestions -->
+        @if(filteredInfractions.length > 0){
+            <div class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto">
+            <div
+                *ngFor="let infraction of filteredInfractions"
+                (click)="selectInfraction(infraction)"
+                class="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0">
+                {{infraction.libelle}}
+            </div>
+            </div>
+        }
+      </div>
+
+      <!-- Details Mad Field (Conditional) -->
+      <div class="mb-8 relative" *ngIf="selectedIntervention?.nomInterventions === 'MAD'">
+        <label for="details" class="block text-sm font-medium text-gray-700">Mad</label>
+        <input
+        type="text"
+        id="details"
+        [(ngModel)]="detailsMad"
+        (input)="filterMad()"
+        name="details"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        placeholder="Saisir NATINF ou libellé">
+        
+        <!-- Mad Suggestions -->
+         @if(filteredMad.length > 0){
+            <div class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto">
+                <div
+                  *ngFor="let mad of filteredMad"
+                  (click)="selectMad(mad)"
+                  class="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0">
+                  {{mad.libelle}}
+                </div>
+              </div>
+         }
       </div>
 
       <!-- Address Input with Autocomplete -->
@@ -94,7 +122,24 @@
       <div class="flex justify-center">
         <button
           type="submit"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          [disabled]="!selectedIntervention || 
+                     (selectedIntervention.nomInterventions === 'CODE DE LA ROUTE' && !isValidInfraction) ||
+                     (selectedIntervention.nomInterventions === 'MAD' && !isValidMad) ||
+                     !isValidAddress ||
+                     !nombreIntervention ||
+                     !dateIntervention"
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white"
+          [ngClass]="{
+            'bg-indigo-600 hover:bg-indigo-700': selectedIntervention && 
+              ((selectedIntervention.nomInterventions === 'CODE DE LA ROUTE' && isValidInfraction) ||
+               (selectedIntervention.nomInterventions === 'MAD' && isValidMad) ||
+               (selectedIntervention.nomInterventions !== 'CODE DE LA ROUTE' && selectedIntervention.nomInterventions !== 'MAD')) && 
+              isValidAddress && nombreIntervention && dateIntervention,
+            'bg-gray-400 cursor-not-allowed': !selectedIntervention || 
+              (selectedIntervention.nomInterventions === 'CODE DE LA ROUTE' && !isValidInfraction) ||
+              (selectedIntervention.nomInterventions === 'MAD' && !isValidMad) ||
+              !isValidAddress || !nombreIntervention || !dateIntervention
+          }">
           Enregistrer l'intervention
         </button>
       </div>

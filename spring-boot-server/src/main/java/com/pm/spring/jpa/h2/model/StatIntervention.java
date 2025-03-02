@@ -13,15 +13,24 @@ public class StatIntervention {
     @Column(name = "date_interventions")
     private LocalDateTime date_interventions;
 
-    @Column(name = "lieu_interventions", length = 45)
-    private String lieu_interventions;
-
     @Column(name = "nombre_intervention")
     private int nombre_intervention;
 
     @ManyToOne
     @JoinColumn(name = "id_interventions", referencedColumnName = "idInterventions", nullable = false)
     private Interventions intervention;
+
+    @ManyToOne
+    @JoinColumn(name = "id_adresse", referencedColumnName = "idadresse", nullable = false)
+    private Adresses adresse;
+
+    @ManyToOne
+    @JoinColumn(name = "id_mad", referencedColumnName = "id_mad", nullable = true)
+    private Mad mad;
+
+    @ManyToOne
+    @JoinColumn(name = "id_infraction", referencedColumnName = "id_infraction", nullable = true)
+    private Infraction infraction;
 
     public StatIntervention() {
     }
@@ -42,14 +51,6 @@ public class StatIntervention {
         this.date_interventions = date_interventions;
     }
 
-    public String getLieu_interventions() {
-        return lieu_interventions;
-    }
-
-    public void setLieu_interventions(String lieu_interventions) {
-        this.lieu_interventions = lieu_interventions;
-    }
-
     public Interventions getIntervention() {
         return intervention;
     }
@@ -65,4 +66,8 @@ public class StatIntervention {
     public void setNombre_intervention(int nombre_intervention) {
         this.nombre_intervention = nombre_intervention;
     }
+    public Adresses getAdresse() {
+        return adresse;
+    }
+    public void setAdresse(Adresses adresse) {}
 }
