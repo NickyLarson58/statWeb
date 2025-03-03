@@ -2,22 +2,24 @@ package com.pm.spring.jpa.h2.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "stat_intervention")
 public class StatIntervention {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_stat_intervention;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_stat_intervention")
+    private Long idStatIntervention;
 
     @Column(name = "date_interventions")
-    private LocalDateTime date_interventions;
+    private LocalDateTime dateInterventions;
 
     @Column(name = "nombre_intervention")
-    private int nombre_intervention;
+    private int nombreIntervention;
 
     @ManyToOne
-    @JoinColumn(name = "id_interventions", referencedColumnName = "idInterventions", nullable = false)
+    @JoinColumn(name = "id_interventions", referencedColumnName = "id_interventions", nullable = false)
     private Interventions intervention;
 
     @ManyToOne
@@ -32,23 +34,32 @@ public class StatIntervention {
     @JoinColumn(name = "id_infraction", referencedColumnName = "id_infraction", nullable = true)
     private Infraction infraction;
 
-    public StatIntervention() {
+    @ManyToMany
+    @JoinColumn(name = "matricule_agent_intervention", referencedColumnName = "matricule", nullable = false)
+    private List<Agents> agents;
+
+    public Long getIdStatIntervention() {
+        return idStatIntervention;
     }
 
-    public int getId_stat_intervention() {
-        return id_stat_intervention;
+    public void setIdStatIntervention(Long idStatIntervention) {
+        this.idStatIntervention = idStatIntervention;
     }
 
-    public void setId_stat_intervention(int id_stat_intervention) {
-        this.id_stat_intervention = id_stat_intervention;
+    public LocalDateTime getDateInterventions() {
+        return dateInterventions;
     }
 
-    public LocalDateTime getDate_interventions() {
-        return date_interventions;
+    public void setDateInterventions(LocalDateTime dateInterventions) {
+        this.dateInterventions = dateInterventions;
     }
 
-    public void setDate_interventions(LocalDateTime date_interventions) {
-        this.date_interventions = date_interventions;
+    public int getNombreIntervention() {
+        return nombreIntervention;
+    }
+
+    public void setNombreIntervention(int nombreIntervention) {
+        this.nombreIntervention = nombreIntervention;
     }
 
     public Interventions getIntervention() {
@@ -59,15 +70,35 @@ public class StatIntervention {
         this.intervention = intervention;
     }
 
-    public int getNombre_intervention() {
-        return nombre_intervention;
-    }
-
-    public void setNombre_intervention(int nombre_intervention) {
-        this.nombre_intervention = nombre_intervention;
-    }
     public Adresses getAdresse() {
         return adresse;
     }
-    public void setAdresse(Adresses adresse) {}
+
+    public void setAdresse(Adresses adresse) {
+        this.adresse = adresse;
+    }
+
+    public Mad getMad() {
+        return mad;
+    }
+
+    public void setMad(Mad mad) {
+        this.mad = mad;
+    }
+
+    public Infraction getInfraction() {
+        return infraction;
+    }
+
+    public void setInfraction(Infraction infraction) {
+        this.infraction = infraction;
+    }
+
+    public List<Agents> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agents> agents) {
+        this.agents = agents;
+    }
 }

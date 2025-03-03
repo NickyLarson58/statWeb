@@ -2,77 +2,90 @@ package com.pm.spring.jpa.h2.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "stat_mission")
 public class StatMission {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_stat_mission")
-    private int id_stat_mission;
+    private int idStatMission;
 
     @Column(name = "date_mission")
-    private LocalDateTime date_mission;
+    private LocalDateTime dateMission;
 
-    @Column(name = "lieu_mission", length = 45)
-    private String lieu_mission;
+    @ManyToOne
+    @JoinColumn(name = "id_adresse", referencedColumnName = "idadresse", nullable = false)
+    private Adresses lieuMission;
 
     @ManyToOne
     @JoinColumn(name = "id_mission", referencedColumnName = "id_mission", nullable = false)
     private Missions missions;
 
     @Column(name = "commerce")
-    private Integer commerce;
+    private String commerce;
 
     @Column(name = "duree_mission")
-    private Integer duree_mission;
+    private Integer dureeMission;
 
-    // Getters and Setters
-    public int getId_stat_mission() {
-        return id_stat_mission;
+    @ManyToMany
+    @JoinColumn(name = "matricule_agent_intervention", referencedColumnName = "matricule", nullable = false)
+    private List<Agents> agents;
+
+    public int getIdStatMission() {
+        return idStatMission;
     }
 
-    public void setId_stat_mission(int id_stat_mission) {
-        this.id_stat_mission = id_stat_mission;
+    public void setIdStatMission(int idStatMission) {
+        this.idStatMission = idStatMission;
     }
 
-    public LocalDateTime getDate_mission() {
-        return date_mission;
+    public LocalDateTime getDateMission() {
+        return dateMission;
     }
 
-    public void setDate_mission(LocalDateTime date_mission) {
-        this.date_mission = date_mission;
+    public void setDateMission(LocalDateTime dateMission) {
+        this.dateMission = dateMission;
     }
 
-    public String getLieu_mission() {
-        return lieu_mission;
+    public Adresses getLieuMission() {
+        return lieuMission;
     }
 
-    public void setLieu_mission(String lieu_mission) {
-        this.lieu_mission = lieu_mission;
+    public void setLieuMission(Adresses lieuMission) {
+        this.lieuMission = lieuMission;
     }
 
-    public Missions getMission() {
+    public Missions getMissions() {
         return missions;
     }
 
-    public void setMission(Missions mission) {
-        this.missions = mission;
+    public void setMissions(Missions missions) {
+        this.missions = missions;
     }
 
-    public Integer getCommerce() {
+    public String getCommerce() {
         return commerce;
     }
 
-    public void setCommerce(Integer commerce) {
+    public void setCommerce(String commerce) {
         this.commerce = commerce;
     }
 
-    public Integer getDuree_mission() {
-        return duree_mission;
+    public Integer getDureeMission() {
+        return dureeMission;
     }
 
-    public void setDuree_mission(Integer duree_mission) {
-        this.duree_mission = duree_mission;
+    public void setDureeMission(Integer dureeMission) {
+        this.dureeMission = dureeMission;
+    }
+
+    public List<Agents> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agents> agents) {
+        this.agents = agents;
     }
 }

@@ -9,13 +9,15 @@ import { HomeComponent } from './components/home/home.component';
 import { EquipageComponent } from './components/equipage/equipage.component';
 import { MissionsComponent } from './components/missions/missions.component';
 import { InterventionsComponent } from './components/interventions/interventions.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     MissionsComponent,
-    InterventionsComponent
+    InterventionsComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,

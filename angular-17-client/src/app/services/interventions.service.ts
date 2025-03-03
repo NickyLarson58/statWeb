@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from './auth.service';
 
 export interface Intervention {
-    id?: number;
+    idInterventions?: number;
     nomInterventions: string;
   }
 
@@ -15,10 +16,11 @@ export interface CreatedStatIntervention {
   idAdresse: number;
   idMad?: number;
   idInfraction?: number;
+  agents: User[] | null;
 }
 
 export interface Address {
-  id: number;
+  idadresse: number;
   nomadresse: string;
 }
 

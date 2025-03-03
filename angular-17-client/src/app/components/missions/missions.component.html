@@ -86,7 +86,15 @@
       <div class="flex justify-center">
         <button
           type="submit"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          [disabled]="!selectedMission || 
+                     !isValidAddress || 
+                     duration <= 0 || 
+                     (selectedMission?.nomMission === 'Contact Commerce' && !commerce)"
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white"
+          [ngClass]="{
+            'bg-indigo-600 hover:bg-indigo-700': selectedMission && isValidAddress && duration > 0 && (selectedMission?.nomMission !== 'Contact Commerce' || commerce),
+            'bg-gray-400 cursor-not-allowed': !selectedMission || !isValidAddress || duration <= 0 || (selectedMission?.nomMission === 'Contact Commerce' && !commerce)
+          }">
           Enregistrer la mission
         </button>
       </div>

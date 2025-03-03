@@ -1,16 +1,17 @@
 package com.pm.spring.jpa.h2.controller;
 
-import com.pm.spring.jpa.h2.model.Adresses;
 import com.pm.spring.jpa.h2.model.Missions;
 import com.pm.spring.jpa.h2.model.StatMission;
+import com.pm.spring.jpa.h2.payload.CreatedStatMissionDTO;
 import com.pm.spring.jpa.h2.repository.MissionsRepository;
 import com.pm.spring.jpa.h2.repository.StatMissionRepository;
+import com.pm.spring.jpa.h2.service.MissionService;
+import com.pm.spring.jpa.h2.service.impl.MissionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class MissionsController {
 
     @Autowired
     MissionsRepository missionRepository;
+
+    @Autowired
+    MissionService missionService;
 
     @GetMapping("/missions")
     public ResponseEntity<List<Missions>> getAllMissions() {
@@ -90,26 +94,22 @@ public class MissionsController {
     }
 
     @PostMapping("/missions/stat")
-    public ResponseEntity<StatMission> createStatMission(@RequestBody StatMission mission) {
-        try {
-            StatMission _mission = statMissionRepository.save(mission);
-            return new ResponseEntity<>(_mission, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<StatMission> createStatMission(@RequestBody CreatedStatMissionDTO CreatedStatMissionDTO) {
+        StatMission createdMission = missionService.createMission(CreatedStatMissionDTO);
+        return ResponseEntity.ok(createdMission);
     }
-
+    
     @PutMapping("/missions/{id}/stat")
     public ResponseEntity<StatMission> updateStatMission(@PathVariable("id") long id, @RequestBody StatMission mission) {
         Optional<StatMission> missionData = statMissionRepository.findById(id);
 
         if (missionData.isPresent()) {
             StatMission _mission = missionData.get();
-            _mission.setDate_mission(mission.getDate_mission());
-            _mission.setLieu_mission(mission.getLieu_mission());
-            _mission.setMission(mission.getMission());
+            _mission.setDateMission(mission.getDateMission());
+            _mission.setLieuMission(mission.getLieuMission());
+            _mission.setMissions(mission.getMissions());
             _mission.setCommerce(mission.getCommerce());
-            _mission.setDuree_mission(mission.getDuree_mission());
+            _mission.setDureeMission(mission.getDureeMission());
             return new ResponseEntity<>(statMissionRepository.save(_mission), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

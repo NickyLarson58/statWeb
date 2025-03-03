@@ -1,55 +1,27 @@
 package com.pm.spring.jpa.h2.payload;
 
+import com.pm.spring.jpa.h2.model.Agents;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class CreatedStatInterventionDTO {
-    private Long idIntervention;
-    private LocalDate dateIntervention;
+    private int idIntervention;
+    private LocalDateTime dateIntervention;
     private String nomInterventions;
     private Integer nombreIntervention;
     private Long idAdresse;
     private Long idInfraction;
     private Long idMad;
+    private List<Agents> agents;
 
-    // Getters and Setters
-    public Long getIdIntervention() {
-        return idIntervention;
+    public Long getIdMad() {
+        return idMad;
     }
 
-    public void setIdIntervention(Long idIntervention) {
-        this.idIntervention = idIntervention;
-    }
-
-    public LocalDate getDateIntervention() {
-        return dateIntervention;
-    }
-
-    public void setDateIntervention(LocalDate dateIntervention) {
-        this.dateIntervention = dateIntervention;
-    }
-
-    public String getNomInterventions() {
-        return nomInterventions;
-    }
-
-    public void setNomInterventions(String nomInterventions) {
-        this.nomInterventions = nomInterventions;
-    }
-
-    public Integer getNombreIntervention() {
-        return nombreIntervention;
-    }
-
-    public void setNombreIntervention(Integer nombreIntervention) {
-        this.nombreIntervention = nombreIntervention;
-    }
-
-    public Long getIdAdresse() {
-        return idAdresse;
-    }
-
-    public void setIdAdresse(Long idAdresse) {
-        this.idAdresse = idAdresse;
+    public void setIdMad(Long idMad) {
+        this.idMad = idMad;
     }
 
     public Long getIdInfraction() {
@@ -60,11 +32,51 @@ public class CreatedStatInterventionDTO {
         this.idInfraction = idInfraction;
     }
 
-    public Long getIdMad() {
-        return idMad;
+    public Long getIdAdresse() {
+        return idAdresse;
     }
 
-    public void setIdMad(Long idMad) {
-        this.idMad = idMad;
+    public void setIdAdresse(Long idAdresse) {
+        this.idAdresse = idAdresse;
+    }
+
+    public Integer getNombreIntervention() {
+        return nombreIntervention;
+    }
+
+    public void setNombreIntervention(Integer nombreIntervention) {
+        this.nombreIntervention = nombreIntervention;
+    }
+
+    public String getNomInterventions() {
+        return nomInterventions;
+    }
+
+    public void setNomInterventions(String nomInterventions) {
+        this.nomInterventions = nomInterventions;
+    }
+
+    public LocalDateTime getDateIntervention() {
+        return dateIntervention;
+    }
+
+    public void setDateIntervention(LocalDateTime dateIntervention) {
+        this.dateIntervention = dateIntervention;
+    }
+
+    public int getIdIntervention() {
+        return idIntervention;
+    }
+
+    public void setIdIntervention(int idIntervention) {
+        this.idIntervention = idIntervention;
+    }
+
+    public List<Agents> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agents> agents) {
+        this.agents = agents;
     }
 }

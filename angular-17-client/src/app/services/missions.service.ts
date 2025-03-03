@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Mission {
-  id: number;
+  idMission: number;
   nomMission: string;
 }
 
 export interface Address {
-  id: number;
+  idadresse: number;
   nomadresse: string;
 }
 
@@ -28,8 +28,8 @@ export class MissionsService {
     return this.http.get<Address[]>(`${this.baseUrl}/adresses`);
   }
 
-  createMission(mission: Omit<Mission, 'id'>): Observable<Mission> {
-    return this.http.post<Mission>(`${this.baseUrl}/missions`, mission);
+  createMissionStat(mission: Omit<Mission, 'id'>): Observable<Mission> {
+    return this.http.post<Mission>(`${this.baseUrl}/missions/stat`, mission);
   }
 
   updateMission(id: number, mission: Omit<Mission, 'id'>): Observable<Mission> {

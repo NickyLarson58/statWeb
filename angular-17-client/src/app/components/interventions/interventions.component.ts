@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { InterventionsService, Intervention, Address, CreatedStatIntervention } from '../../services/interventions.service';
 import { Route, Router } from '@angular/router';
+import { EquipageService } from '../../services/equipage.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-interventions',
@@ -28,7 +30,7 @@ export class InterventionsComponent implements OnInit {
   selectedMad: any | null = null;
   selectedInfraction: any | null = null;
 
-  constructor(private interventionsService: InterventionsService, private router: Router) {}
+  constructor(private interventionsService: InterventionsService, private router: Router, private equipageService: EquipageService, private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.loadInterventions();
@@ -98,35 +100,36 @@ export class InterventionsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.selectedIntervention || !this.isValidAddress || !this.nombreIntervention || !this.dateIntervention || !this.selectedAdress ||
+    if (!this.selectedIntervention || !this.isValidAddress || this.nombreIntervention === undefined || !this.dateIntervention || !this.selectedAdress ||
         (this.selectedIntervention.nomInterventions === 'CODE DE LA ROUTE' && !this.isValidInfraction) ||
         (this.selectedIntervention.nomInterventions === 'MAD' && !this.isValidMad)) {
-      alert('Veuillez sélectionner des valeurs valides dans les listes suggérées');
+      this.notificationService.error('Veuillez sélectionner des valeurs valides dans les listes suggérées');
       return;
     }
 
     const createdStatIntervention: CreatedStatIntervention = {
-      idIntervention: this.selectedIntervention.id!,
-      dateIntervention: this.dateIntervention,
+      idIntervention: this.selectedIntervention.idInterventions!,
+      dateIntervention: `${this.dateIntervention}T00:00:00`,
       nomInterventions: this.selectedIntervention.nomInterventions,
       nombreIntervention: this.nombreIntervention,
-      idAdresse: this.selectedAdress.id,
+      idAdresse: this.selectedAdress.idadresse,
+      agents: this.equipageService.getEquipage()
     };
 
     if(this.selectedIntervention.nomInterventions === 'CODE DE LA ROUTE'){
-      createdStatIntervention.idInfraction = this.selectedInfraction.id;
+      createdStatIntervention.idInfraction = this.selectedInfraction.id_infraction;
     }else if(this.selectedIntervention.nomInterventions === 'MAD'){
-      createdStatIntervention.idMad = this.selectedMad.id;
+      createdStatIntervention.idMad = this.selectedMad.id_mad;
     }
     this.interventionsService.createIntervention(createdStatIntervention).subscribe({
       next: () => {
-        alert('Intervention enregistrée avec succès');
+        this.notificationService.success('Intervention enregistrée avec succès');
         this.resetForm();
         this.router.navigate(['/home']);
       },
       error: (e) => {
         console.error('Error creating intervention:', e);
-        alert('Erreur lors de l\'enregistrement de l\'intervention');
+        this.notificationService.error('Erreur lors de l\'enregistrement de l\'intervention');
       }
     });
   }

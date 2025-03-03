@@ -8,17 +8,18 @@ public class Missions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_mission;
+    @Column(name = "id_mission")
+    private int idMission;
 
     @Column(name = "nom_mission")
     private String nomMission;
 
-    public int getId_mission() {
-        return id_mission;
+    public int getIdMission() {
+        return idMission;
     }
 
-    public void setId_mission(int id_mission) {
-        this.id_mission = id_mission;
+    public void setIdMission(int idMission) {
+        this.idMission = idMission;
     }
 
     public String getNomMission() {

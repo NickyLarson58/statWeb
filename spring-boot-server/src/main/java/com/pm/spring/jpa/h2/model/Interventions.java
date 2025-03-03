@@ -8,9 +8,10 @@ public class Interventions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_interventions")
     private int idInterventions;
 
-    @Column(name = "nomInterventions")
+    @Column(name = "nom_interventions")
     private String nomInterventions;
 
     public Interventions() {

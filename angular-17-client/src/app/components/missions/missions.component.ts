@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MissionsService, Mission, Address } from '../../services/missions.service';
+import { NotificationService } from '../../services/notification.service';
+import { Router } from '@angular/router';
+import { EquipageService } from '../../services/equipage.service';
 
 @Component({
   selector: 'app-missions',
@@ -16,8 +19,10 @@ export class MissionsComponent implements OnInit {
   duration: number = 0;
   commerce: string = '';
   missionDate: string = new Date().toISOString().split('T')[0];
+  isValidAddress: boolean = false;
+  selectedAddress: Address | null = null;
 
-  constructor(private missionsService: MissionsService) {}
+  constructor(private missionsService: MissionsService, private notificationService: NotificationService, private router: Router, private equipageService: EquipageService) {}
 
   ngOnInit(): void {
     this.loadMissions();
@@ -45,6 +50,7 @@ export class MissionsComponent implements OnInit {
 
   filterAddresses(): void {
     this.filteredAddresses = [];
+    this.isValidAddress = false;
     
     if (!this.addressInput || this.addressInput.trim() === '') {
       return;
@@ -59,16 +65,39 @@ export class MissionsComponent implements OnInit {
   }
 
   selectAddress(address: Address): void {
-    this.addressInput = `${address.nomadresse}`;
+    this.addressInput = address.nomadresse;
+    this.selectedAddress = address;
     this.filteredAddresses = [];
+    this.isValidAddress = true;
   }
 
   onSubmit(): void {
-    if (!this.addressInput || !this.duration || !this.commerce) {
-      alert('Please fill in all required fields');
+    if (!this.selectedMission || !this.isValidAddress || !this.selectedAddress || this.duration <= 0 || (this.selectedMission.nomMission === '' && !this.commerce)) {
+      this.notificationService.error('Veuillez sélectionner des valeurs valides dans les listes suggérées et remplir tous les champs requis');
       return;
     }
 
+    const missionData = {
+      idMission: this.selectedMission.idMission,
+      dateMission: `${this.missionDate}T00:00:00`,
+      nomMission: this.selectedMission.nomMission,
+      duree: this.duration,
+      commerce: this.commerce,
+      idAdresse: this.selectedAddress.idadresse,
+      agents: this.equipageService.getEquipage()
+    };
+    
+    this.missionsService.createMissionStat(missionData).subscribe({
+      next: () => {
+        this.notificationService.success('Mission enregistrée avec succès');
+        this.resetForm();
+        this.router.navigate(['/home']);
+      },
+      error: (e) => {
+        console.error('Error creating mission:', e);
+        this.notificationService.error('Erreur lors de l\'enregistrement de la mission');
+      }
+    });
   }
 
   resetForm(): void {
@@ -77,5 +106,7 @@ export class MissionsComponent implements OnInit {
     this.duration = 0;
     this.commerce = '';
     this.filteredAddresses = [];
+    this.isValidAddress = false;
+    this.selectedAddress = null;
   }
 }
