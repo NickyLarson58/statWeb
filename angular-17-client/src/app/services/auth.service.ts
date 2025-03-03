@@ -43,12 +43,14 @@ export class AuthService {
       })
     );
   }
+
   logout(): void {
     localStorage.removeItem('user-info');
     this.currentUserSubject.next(null);
     // Clear equipage data when logging out
     this.equipageService.clearEquipage();
   }
+  
   getToken(): string | null {
     const user = localStorage.getItem('user-info');
     return user ? 'true' : null;

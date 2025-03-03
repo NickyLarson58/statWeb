@@ -10,6 +10,7 @@ import { EquipageComponent } from './components/equipage/equipage.component';
 import { MissionsComponent } from './components/missions/missions.component';
 import { InterventionsComponent } from './components/interventions/interventions.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NotificationComponent } from './components/notification/notification.co
     HomeComponent,
     MissionsComponent,
     InterventionsComponent,
-    NotificationComponent
+    NotificationComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
