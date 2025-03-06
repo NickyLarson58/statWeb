@@ -26,12 +26,30 @@ export class EquipageComponent {
     private route: Router,
     private authService: AuthService
   ) { 
+    // Récupérer l'utilisateur connecté
+    let currentUser: User | null = null;
+    this.authService.currentUser$.subscribe(user => {
+      currentUser = user;
+    });
+
     this.agentsService.getAllAgents().subscribe(
       (data) => {
         this.agents = this.sortAgents(data);
         this.filteredAgents = [...this.agents].sort((a, b) => 
           a.nomAgent.localeCompare(b.nomAgent)
-        );        
+        );
+        
+        // Sélectionner automatiquement l'agent connecté dans le premier menu déroulant
+        if (currentUser) {
+          const connectedAgent = this.filteredAgents.find(agent => 
+            agent.nomAgent === currentUser?.nomAgent && 
+            agent.prenomAgent === currentUser?.prenomAgent
+          );
+          
+          if (connectedAgent) {
+            this.selectedAgents[0] = connectedAgent;
+          }
+        }
       }
     );
   }
@@ -66,7 +84,6 @@ export class EquipageComponent {
       // TODO: Implement the actual team creation logic here
       this.equipageService.createEquipage(validAgents);
       this.route.navigate(['/home']);
-      console.log('Creating equipage with agents:', validAgents);
     }
   }
 }
