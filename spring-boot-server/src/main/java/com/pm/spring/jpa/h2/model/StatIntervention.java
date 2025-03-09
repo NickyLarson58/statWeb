@@ -8,8 +8,8 @@ import java.util.List;
 @Table(name = "stat_intervention")
 public class StatIntervention {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_stat_intervention")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_stat_intervention", nullable = false)
     private Long idStatIntervention;
 
     @Column(name = "date_interventions")
